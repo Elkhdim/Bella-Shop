@@ -1,6 +1,5 @@
 const router = require('express').Router();
 const Order = require('../model/Order');
-const Product = require('../model/Product');
 
 
 router.get('/', async (req, res) => {
@@ -35,38 +34,26 @@ router.post('/minus', async (req, res) => {
 
     const deleteOneProdct = await Order.findOne({ status: 'CARD', user: req.body.user })
 
-    let remove = false
-
-    let prdts = deleteOneProdct.products.map((product) => {
+    let prdts = deleteOneProdct.products.filter((product) => {
 
         if (product.product == req.body.product.product._id) {
 
-            product.quantity = product.quantity - 1
+            if (product.quantity == 1)
+                return false
+            else {
+                product.quantity = product.quantity - 1
+                return true
+            }
 
-            // si la quantité égale à 0 => supprimer le produit de la cart
-            if (product.quantity === 0)
-                remove = true
-
-            // console.log("One product has been minus with succefly")
         }
 
-        if (remove === false)
-            return product
+        return true
     })
-
-    // quand quantité et 0 ça cause un problème de produit null
-    if (remove) {
-        prdts = prdts.filter(product => product !== null)
-    }
-
 
     try {
         await deleteOneProdct.updateOne({ products: prdts })
         const saveNewOrder = await deleteOneProdct.save();
-        // res.send(saveNewOrder);
-        // console.log(saveNewOrder)
-    }
-    catch (err) {
+    } catch (err) {
         res.status(400).send(err);
     }
 })
