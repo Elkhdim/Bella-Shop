@@ -54,9 +54,10 @@ router.post('/minus', async (req, res) => {
             return product
     })
 
-    // if (remove) {
-    //     await deleteOneProdct.update({ products: prdts })
-    // }
+    // quand quantité et 0 ça cause un problème de produit null
+    if (remove) {
+        prdts = prdts.filter(product => product !== null)
+    }
 
 
     try {
