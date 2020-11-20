@@ -1,5 +1,8 @@
 const express = require('express');
 const app = express();
+// socket
+const server = require("http").createServer(app)
+//const io = require("socket.io")(server)
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const session = require('express-session');
@@ -62,5 +65,8 @@ app.use('/api/posts',postRoute)
 
 }))*/
 
-app.listen(3001,() => console.log('server is runing'));
+
+ 
+
+server.listen(3001,() => console.log('server is runing'));
 

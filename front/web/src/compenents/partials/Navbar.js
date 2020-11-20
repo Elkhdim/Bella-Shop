@@ -1,32 +1,51 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { instanceOf } from 'prop-types';
 import axios from 'axios';
+import { withCookies,Cookies  } from 'react-cookie';
 class Navbar extends Component {
 
-   
-    render(){
+    static propTypes = {
+        cookies: instanceOf(Cookies).isRequired
+      };
 
+      constructor(props) {
+        super(props);
+     
+       // const { cookies } = this.props;
+       /* this.state = {
+          name: cookies.get('name') || 'Ben'
+        };*/
+      }
+    render(){
+        const {token, user} = this.props 
+     /*   const lg = (e) => {
+            const { cookies } = this.props;
+            //cookies.remove('Token');
+           
+        }*/
         const logout = () => {
        
        
-            /*  axios.delete('http://localhost:3001/api/user/logout')
-              .then( (response) => {
-                  
-                     console.log("Logout : ",response);
-                      
-                
-             
-               
-              })
-              .catch( (error) => {
-                console.log(error);
-              });*/
-              console.log("deconnection")
+          
+            axios.get('http://localhost:3001/api/user/logout')
+                .then(response => {
+                   // socket.emit('msocket work succafly')
+                   const { cookies } = this.props;
+                   cookies.remove("token")
+                    console.log("Auth is logout :", response);
+                    console.log("Tokeb is :",token)
+                    //cookies.remove('Token');
+    
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
             
         }
         
-        const {token, user} = this.props
+       
         console.log(token, user)
         const authLinks = token !== null ? 
         (

@@ -2,8 +2,22 @@ const router = require('express').Router();
 const Order = require('../model/Order');
 
 
+
 router.get('/', async (req, res) => {
     const getAllOrders = await Order.find()
+
+    const changeStream = Order.watch();
+    changeStream.on('change', next => {
+        console.log(next)
+        //const orders = await Order.find()
+        try {
+            res.send(next);
+        } catch (err) {
+            console.log(err);
+        }
+    });
+
+
     try {
 
         res.send(getAllOrders);
@@ -53,6 +67,7 @@ router.post('/minus', async (req, res) => {
     try {
         await deleteOneProdct.updateOne({ products: prdts })
         const saveNewOrder = await deleteOneProdct.save();
+        res.send({removed: true})
     } catch (err) {
         res.status(400).send(err);
     }

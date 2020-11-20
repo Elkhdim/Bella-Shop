@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import homme from '../../image/homme.png';
 import axios from 'axios';
 import { connect } from 'react-redux';
+import io from "socket.io-client";
 
+//const socket = io('http://localhost:3000/')
 const Item = (props) => {
 
     //console.log(props)
@@ -20,7 +22,7 @@ const Item = (props) => {
 
         })
             .then(response => {
-
+               // socket.emit('msocket work succafly')
                 console.log("data is send :", response);
 
 

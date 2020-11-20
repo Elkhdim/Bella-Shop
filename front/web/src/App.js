@@ -1,4 +1,4 @@
-import React,{Component} from 'react';
+import React,{Component,useState,useEffect} from 'react';
 import Navbar from './compenents/partials/Navbar';
 import Home from './compenents/home/Home';
 import Login from './compenents/Auth/Login';
@@ -8,14 +8,19 @@ import Dashboard from './compenents/Admin/Dashboard'
 import Order from './compenents/Admin/Order'
 import Product from './compenents/Admin/Product';
 import { Link, BrowserRouter, Route } from 'react-router-dom';
+//import socketClient  from "socket.io-client";
 // import AuthServices from './compenents/services/AuthServices'
 import './App.css';
+//import { connection } from 'mongoose';
 
 // const Auth = new AuthServices();
 
 class App extends Component {
+  
   render() {
     const isAdmin = false
+    
+   
     return (
       <BrowserRouter>
         { isAdmin ? (

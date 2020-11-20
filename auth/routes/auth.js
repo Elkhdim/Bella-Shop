@@ -88,6 +88,7 @@ router.post('/login', async (req,res) => {
       // Create and assign token
 
       const token = jwt.sign({_id:user._id},process.env.TOKEN_SECRET,{expiresIn : "1h"});
+      res.cookie('t', token, { expire: new Date() + 9999 })
       res.header('auth-token',token).json({token,user} );
      
  
@@ -97,13 +98,9 @@ router.get('/', async (req,res)=>{
     const getAllUsers = await AppUser.find();
     res.send(getAllUsers);
 })
-router.delete('/logout', async (req, res,next) => {
-    if (req.session.user && req.cookies.user_sid) {
-        res.clearCookie('user_sid');
-      res.send('logout')
-    } else {
-        res.send('login')
-    }
+router.get('/logout', async (req, res) => {
+        res.clearCookie('t')
+        res.json({ message: 'Signout success' });
 });
 
 

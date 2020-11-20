@@ -14,7 +14,9 @@
     "express-session": "^1.17.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.10.3",
-    "passport": "^0.4.1"
+    "passport": "^0.4.1",
+    "socket.io": "^2.3.0",
+    "websocket": "^1.0.32"
   },
   "devDependencies": {
     "nodemon": "^2.0.4"

@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
-
+import Payment from './payment'
+import socketClient  from "socket.io-client";
 class Cart extends Component {
 
     constructor(props) {
         super(props);
 
         this.state = {
-            cart: [],
-            // total : 0
+            cart: []
         }
     }
 
@@ -20,6 +20,7 @@ class Cart extends Component {
             product: product
         }).then(response => {
             console.log("data is send :", response);
+            this.getOrder();
         }).catch((error) => {
             console.log('Minus failed: ', error);
         });
@@ -45,13 +46,12 @@ class Cart extends Component {
             .then(res => {
 
                 console.log(res)
-                //  console.log("aaaabbb : ",items)
+            
                 this.setState({
                     cart: res.data,
-                    //  total : this.state.total + res.data.products[items].price
+                  
                 })
-                // items = items + 1
-                // this.cart = res.data
+           
             })
             .catch(err => {
                 console.log(err)
@@ -66,7 +66,8 @@ class Cart extends Component {
     componentDidMount = () => {
 
         this.getOrder();
-
+     
+       
     }
 
     render() {
@@ -76,40 +77,64 @@ class Cart extends Component {
         //console.log("render cart : ",this.state.cart)
 
         const listCart = this.state.cart
-
+   
         // console.log('listCart ',listCart)   { prd.quantity * prd.price}
         // total = 0;
         const cardItems = (listCart !== undefined && listCart.products !== undefined) ?
             listCart.products.map((prd, index) => 
-                <p key={index}>
-                    {prd.quantity + '×' + prd.product.name + ' ' + prd.quantity * prd.price + '  $'}
+                <div key={index}>
+                    <div className="row">
+                        <div className="col-sm-6">
+                            
+                            {prd.quantity + '×' + prd.product.name + ' ' + prd.quantity * prd.price + '  $'}
+                        
+                        </div>
+                        <div className="col-sm-3">
+                            <button className="btn " onClick={() => this.removeProduct(prd)}><i className="fa fa-minus" aria-hidden="true"></i></button>
+                        </div>
+                        <div className="col-sm-3">
+                            <button className="btn btn-danger" onClick={() => this.deleteProduct(prd)}><i className="fa fa-trash" aria-hidden="true"></i> </button>
+                        </div>  
+                    </div>
+                    <br/>
+                    
+                </div>
 
-                    <button className="btn btn-danger" onClick={() => this.deleteProduct(prd)}><i className="fa fa-trash" aria-hidden="true"></i> </button>
-                    <button className="btn" onClick={() => this.removeProduct(prd)}><i className="fa fa-minus" aria-hidden="true"></i></button>
-                </p>
-            ) : <div>No Yet !</div>
+        
+            )
+            : <div>No Yet !</div>
 
-        /* const listCartProduct =  this.state.cart.products
-        const Total =  ({ listCartProduct }) => (
-         <h3>
-             Price: 
-             {listCartProduct.reduce((sum, i) => (
-             sum += i.qantity * i.price
-             ), 0)}
+           
+           
+          
+
+            const totalPrice = (listCart !== undefined && listCart.products !== undefined) ?
+            listCart.products.reduce((sum,total)=>sum = sum + total.quantity * total.price,0):<div></div>
+            const buttonPayment = (cardItems !='No Yet !')?  <Payment total = {totalPrice}/> : <div></div>
+
        
-         </h3>
-         ) */
-
         return (
             <div>
                 {
                     cardItems
                 }
+               <h2> Total : 
+                {
+                    totalPrice
+                }</h2>
                 {
                     //  console.log(Total())
+                    buttonPayment
+                    
                 }
+
+               
+
+               
             </div>
+            
         )
+        
     }
 }
 
