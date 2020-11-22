@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import Item from '../partials/item';
 import Cart from '../partials/cart';
+import { connect } from 'react-redux';
+import Login from '../Auth/Login'
 import './style.css'
 var dataProduct = []
 class Man extends Component {
     constructor(props){
         super(props);
-
+        console.log("Props : ", this.props)
         this.state={
             items: [],
             addOrder : []
@@ -50,7 +52,7 @@ class Man extends Component {
     }
 
     render() {
-  
+        const isAuth = this.props.token
         //console.log(user.name)
         const products = this.state.items
         const productList = products.map((prd, index) => {
@@ -62,9 +64,9 @@ class Man extends Component {
         return (
             
          
-         
             
-            <div className="row">
+                isAuth ? (
+                      <div className="row">
 
                 <div className="col-sm-9">
                     <div className="row">
@@ -126,10 +128,23 @@ class Man extends Component {
                 
               
         </div>
+                ):(<div>
+                   <p>Merci de connect pour voire les contenus</p> 
+                    <Login />
+                </div>)
+            
+            
+          
         )
     }
 }
 
+const mapStateToProps = (state, ownProps) => {
+    return {
+        ...ownProps,
+        token: state.auth.token,
+        user: state.auth.user
+    }
+}
 
-
-export default Man
+export default connect(mapStateToProps)(Man)
