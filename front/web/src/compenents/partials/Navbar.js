@@ -6,9 +6,9 @@ import axios from 'axios';
 import { withCookies,Cookies  } from 'react-cookie';
 class Navbar extends Component {
 
-    static propTypes = {
+  /*  static propTypes = {
         cookies: instanceOf(Cookies).isRequired
-      };
+      };*/
 
       constructor(props) {
         super(props);
@@ -32,8 +32,8 @@ class Navbar extends Component {
             axios.get('http://localhost:3001/api/user/logout')
                 .then(response => {
                    // socket.emit('msocket work succafly')
-                   const { cookies } = this.props;
-                   cookies.remove("token")
+                  // const { cookies } = this.props;
+                  // cookies.remove("token")
                     console.log("Auth is logout :", response);
                     console.log("Tokeb is :",token)
                     //cookies.remove('Token');

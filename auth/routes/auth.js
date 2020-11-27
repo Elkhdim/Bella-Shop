@@ -66,11 +66,14 @@ router.post('/login', async (req,res) => {
     if(error) return res.status(400).send(error.details[0].message);
 
       // search email if exist in database
-      const user = await AppUser.findOne({ email: req.body.email});
-      if(!user) return res.status(400).send('email or password is wrong');
-      const passwordexist = bcrypt.compare(req.body.password,user.password)
+
+    /*  const salt = await bcrypt.genSalt(10);
+      const hashPassword = await bcrypt.hash(req.body.password,salt);*/
+      const user = await AppUser.findOne({ email: req.body.email,password : req.body.password});
+      if(!user) return res.status(401).send('email or password is wrong');
+     // const passwordexist = bcrypt.compare(hashPassword,user.password)
     //Get password
-      if(!passwordexist) return res.status(400).send('Invalid password');
+     // if(!passwordexist) return res.status(400).send('Invalid password');
 
      
 
@@ -91,7 +94,7 @@ router.post('/login', async (req,res) => {
       res.cookie('t', token, { expire: new Date() + 9999 })
       res.header('auth-token',token).json({token,user} );
      
- 
+      return res.status(200).send(token)
 
 });
 router.get('/', async (req,res)=>{

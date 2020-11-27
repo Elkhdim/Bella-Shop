@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import Payment from './payment'
-import socketClient  from "socket.io-client";
+
 class Cart extends Component {
 
     constructor(props) {
@@ -49,7 +49,6 @@ class Cart extends Component {
             
                 this.setState({
                     cart: res.data,
-                  
                 })
            
             })
@@ -60,14 +59,16 @@ class Cart extends Component {
 
     /*static getDerivedStateFromProps(props,state) {
        
-        console.log(state)
+        
     }*/
 
     componentDidMount = () => {
-
         this.getOrder();
-     
-       
+    }
+
+    componentDidUpdate = () => {
+        console.log('Heyyy !!! ')
+        this.getOrder();      
     }
 
     render() {
@@ -141,7 +142,8 @@ class Cart extends Component {
 const mapStateToProps = (state) => {
     return {
         token: state.auth.token,
-        user: state.auth.user
+        user: state.auth.user,
+        cart: state.cart.cart
     }
 }
 

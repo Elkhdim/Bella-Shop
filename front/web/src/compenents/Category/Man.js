@@ -57,7 +57,7 @@ class Man extends Component {
         const products = this.state.items
         const productList = products.map((prd, index) => {
             return (
-                <Item product={prd} key={index}/>
+                <Item product={prd} key={index} />
             )
         })
 

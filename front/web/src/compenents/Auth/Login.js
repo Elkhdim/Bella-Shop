@@ -1,23 +1,27 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router'
-
+//import { Redirect } from 'react-router'
+import Home from '../home/Home'
+import { Link, BrowserRouter, Route } from 'react-router-dom';
  class Login extends Component {
 
  constructor(props){
  super(props)
- 
+ console.log(this.props)
   this.state={
     email:"yasser@gmail.com",
-    password:"123456789"
+    password:"123456789",
+    errorMessage : ''
+   
   };
 
 }
 
 handleChange = (ev) =>{
   this.setState({
-    [ev.target.name]: ev.target.value
+   [ev.target.name]: ev.target.value
+
   });
 }
 
@@ -25,33 +29,31 @@ handleChange = (ev) =>{
  
   handleSubmit = (ev) => {
     ev.preventDefault();
+  
   console.log(this.state) 
   
 
-    axios.post('http://localhost:3001/api/user/login', this.state)
+    axios.post('http://localhost:3001/api/user/login', {email : this.state.email,password : this.state.password})
     .then( (response) => {
-        
-           console.log(response);
-            this.props.userLogin(response.data.token,response.data.user)
-            
       
-   
-     
+           console.log(response);
+            this.props.userLogin(response.data.token,response.data.user);
+            // Redirection
+            this.props.history.push('/')
+           // if(re)
     })
     .catch( (error) => {
       console.log(error);
-     
+    this.setState({
+       errorMessage : "Email ou mot de passe incorrect"
+     })
     });
     
   }
 
 
     render() {
-    //  const err = this.state.error
-      if (this.state.isSigned) {
-        // redirect to home if signed up
-        return <Redirect to = {{ pathname: "/" }} />;
-      }
+   
 
         return (
             <form onSubmit={this.handleSubmit}>
@@ -64,8 +66,10 @@ handleChange = (ev) =>{
               <input type="password" className="form-control" id="password" value={this.state.password} name="password" onChange={this.handleChange}/>
             </div>
             {
-         // err ? (<div>Email ou Mot de passe incorrect</div>):(<div></div>)
-         }
+     
+              this.state.errorMessage != '' &&
+              <h3 className="error"> { this.state.errorMessage } </h3> 
+            }
             <div className="checkbox">
               <label><input type="checkbox" /> Remember me</label>
             </div>
