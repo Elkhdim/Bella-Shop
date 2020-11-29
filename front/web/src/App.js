@@ -8,6 +8,7 @@ import Dashboard from './compenents/Admin/Dashboard'
 import Order from './compenents/Admin/Order'
 import Product from './compenents/Admin/Product';
 import { Link, BrowserRouter, Route } from 'react-router-dom';
+import { connect } from 'react-redux';
 //import socketClient  from "socket.io-client";
 // import AuthServices from './compenents/services/AuthServices'
 import './App.css';
@@ -18,8 +19,13 @@ import './App.css';
 class App extends Component {
   
   render() {
-    const isAdmin = false
-    
+    const {token, user} = this.props 
+    var isAdmin = false
+    console.log(user)
+    if(user !== null){
+       isAdmin = user.isAdmin;
+    }
+  
    
     return (
       <BrowserRouter>
@@ -78,4 +84,11 @@ class App extends Component {
   */
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  return {
+      token: state.auth.token,
+      user: state.auth.user
+  }
+}
+
+export default connect(mapStateToProps)(App);

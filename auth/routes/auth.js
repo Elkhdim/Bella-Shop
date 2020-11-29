@@ -67,8 +67,8 @@ router.post('/login', async (req,res) => {
 
       // search email if exist in database
 
-    /*  const salt = await bcrypt.genSalt(10);
-      const hashPassword = await bcrypt.hash(req.body.password,salt);*/
+      const salt = await bcrypt.genSalt(10);
+      const hashPassword = await bcrypt.hash(req.body.password,salt);
       const user = await AppUser.findOne({ email: req.body.email,password : req.body.password});
       if(!user) return res.status(401).send('email or password is wrong');
      // const passwordexist = bcrypt.compare(hashPassword,user.password)
